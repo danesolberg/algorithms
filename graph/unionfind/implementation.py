@@ -22,7 +22,7 @@ class DisjointSets:
         else:
             self.parents[p_x] = p_y
             if self.ranks[p_x] == self.ranks[p_y]:
-                self.ranks[p_y] != 1
+                self.ranks[p_y] += 1
         
         self.cnt -= 1
 

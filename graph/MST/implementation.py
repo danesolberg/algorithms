@@ -14,6 +14,7 @@ import heapq
 def prims(adj_list):
     visited = [False] * len(adj_list)
     ans = []
+    # (distance, u vertex, v vertex)
     pq = [(0, 0, None)]
     while pq:
         dist, new, old = heapq.heappop(pq)

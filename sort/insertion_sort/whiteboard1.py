@@ -1,4 +1,4 @@
-def insertion_sort(arr):
+def insertionsort(arr):
     for i in range(1, len(arr)):
         val = arr[i]
         j = i - 1
@@ -10,8 +10,6 @@ def insertion_sort(arr):
         arr[j+1] = val
 
 if __name__ == '__main__':
-    l = [7,2,1,6,8,5,3,4]
-
-    insertion_sort(l)
-
-    print(l)
+    l = [7, 2, 1, 6, 8, 5, 3, 4]
+    insertionsort(l)
+    assert l == [1, 2, 3, 4, 5, 6, 7, 8]
