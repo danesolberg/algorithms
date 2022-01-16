@@ -55,10 +55,15 @@ class MaxHeap:
 
     def heapify(self, arr):
         self.heap_array = arr[:]
+        # start at last parent node, since nothing after can sift down
+        # always (len // 2) - 1
+        # percolate down is most expensive at top of heap (in worst case),
+        # so start at the bottom to save worst case cost (O(n))
         for i in range(len(self.heap_array) // 2 - 1, -1, -1):
             self.percolate_down(i, len(self.heap_array))
 
     def heap_sort(self):
+        # O(nlogn) because we sift down O(logn) from the top n times
         for i in range(len(self.heap_array)-1, 0, -1):
             self.heap_array[0], self.heap_array[i] = self.heap_array[i], self.heap_array[0]
             self.percolate_down(0, i)
