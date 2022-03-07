@@ -1,3 +1,6 @@
+import heapq
+
+
 class Node:
     def __init__(self, val, adjacent = None):
         self.val = val
@@ -10,7 +13,10 @@ class Node:
         a = [v.val for v, dist in self.adjacent]
         return f"{self.val} | {a}"
 
-import heapq
+# this version runs in O(ElogE), which is at most ElogV^2 or E * 2logV.
+# it can be improved to ElogV by only keeping the shortest edge to nodes
+# outside the MST in the heap, instead of all edges. This requires a custom heap
+# that I don't want to implement.
 def prims(adj_list):
     visited = [False] * len(adj_list)
     ans = []
@@ -31,7 +37,7 @@ def prims(adj_list):
     return ans
 
 
-
+# standard union find
 class DisjointSets:
     def __init__(self, n, cnt = None):
         self.n = n
@@ -60,6 +66,7 @@ class DisjointSets:
         
         self.cnt -= 1
 
+# same runtime complexity as the unoptimized Prim's
 def kruskals(adj_list):
     uf = DisjointSets(len(adj_list))
     pq = []
@@ -104,10 +111,5 @@ if __name__ == "__main__":
 
     adj_list = [[(mapping[n], w) for n, w in v.adjacent] for v in [a,b,c,d,e,f]]
 
-    mst = prims(adj_list)
-    print(mst)
-
-    mst = kruskals(adj_list)
-    print(mst)
-
-        
+    assert sorted(prims(adj_list)) == sorted(kruskals(adj_list))
+ 

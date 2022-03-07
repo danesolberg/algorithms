@@ -52,7 +52,7 @@ if __name__ == "__main__":
     }
 
     adj_list = [[(mapping[n], w) for n, w in v.adjacent] for v in [a,b,c,d,e,f]]
-    print(adj_list)
+
     dists = dijkstra(adj_list, mapping, a)
 
     print(dists)

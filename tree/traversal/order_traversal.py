@@ -86,8 +86,7 @@ def postorder_iter(root, arr):
                 cur = cur.right
         return arr
 
-
-if __name__ == "__main__":
+def create_tree():
     a = Node('a', None, None)
     d = Node('d', None, None)
     f = Node('f', None, None)
@@ -95,10 +94,15 @@ if __name__ == "__main__":
     e = Node('e', d, f)
     c = Node('c', b, e)
 
-    assert preorder(c, []) == ['c', 'b', 'a', 'e', 'd', 'f']
-    assert inorder(c, []) == ['a', 'b', 'c', 'd', 'e', 'f']
-    assert postorder(c, []) == ['a', 'b', 'd', 'f', 'e', 'c']
+    return c
 
-    assert preorder(c, []) == preorder_iter(c, [])
-    assert inorder(c, []) == inorder_iter(c, [])
-    assert postorder(c, []) == postorder_iter(c, [])
+if __name__ == "__main__":
+    
+    tree = create_tree()
+    assert preorder(tree, []) == ['c', 'b', 'a', 'e', 'd', 'f']
+    assert inorder(tree, []) == ['a', 'b', 'c', 'd', 'e', 'f']
+    assert postorder(tree, []) == ['a', 'b', 'd', 'f', 'e', 'c']
+
+    assert preorder(tree, []) == preorder_iter(tree, [])
+    assert inorder(tree, []) == inorder_iter(tree, [])
+    assert postorder(tree, []) == postorder_iter(tree, [])

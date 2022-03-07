@@ -25,20 +25,32 @@ from collections import defaultdict
 
 # use a max flow analysis to solve this.
 # if your flow network only has 1 capacity from the source to each dice, and
-# 1 capacity from each dice to each letter, and 1 capacity from each letter to the sink
-# then you can only make the word from the given dice if the max flow equals the length of the word
+# 1 capacity from each dice to each letter in "word", and 
+# 1 capacity from each letter in "word" to the sink, then
+# you can only make the word from the given dice if the max flow equals the length of the word
 # used Edmonds-Karp for complexity of O(V * E^2)
 def dice_to_word1(dice, word):
     letter_to_idx = defaultdict(list)
     for i, c in enumerate(word):
         letter_to_idx[c].append(i)
 
+    # create a matrix where element at i,j == capacity from node i to node j
+    # n x n matrix where n == # of nodes (source + m dice + c characters + sink)
     node_cnt = len(dice) + len(word) + 2
+    # capacity of 1 from source to each dice,
+    # capacity of 0 from source to each letter,
+    # capacity of 0 frm source to sink
     graph = [[0] + [1] * len(dice) + [0] * (len(word) + 1)]
+    # init capacity of 0 from each dice to each letter (these are filled in later)
+    # capacity of zero to source and sink
     graph.extend([[0] * node_cnt for _ in range(node_cnt-2)])
-    graph.append([0] * (len(dice)+1) + [1] * len(word) + [0])
+    # capacity of 0 from sink to any other node
+    graph.append([0] * (len(dice)+1) + [0] * len(word) + [0])
 
+    # for dice that contains a letter in "word", set capacity between
+    # dice and letter node to 1
     for i in range(len(dice)):
+        # since the graph is [source], [dice0], [dice1]
         dice_node = i + 1
         for l in dice[i]:
             if l in letter_to_idx:
@@ -46,6 +58,7 @@ def dice_to_word1(dice, word):
                     letter_node = len(dice) + 1 + j
                     graph[dice_node][letter_node] = 1
 
+    # set capacity from letter node to sink node to 1
     for i in range(len(dice)+1, len(graph)-1):
         graph[i][-1] = 1
 
@@ -105,6 +118,14 @@ if __name__ == "__main__":
         ['a', 'b', 'c', 'd', 'e', 'f'],
         ['a', 'b', 'c', 'd', 'e', 'f'],
         ['a', 'b', 'c', 'd', 'e', 'f']
+    ], "hello") is False
+
+    assert dice_to_word1([
+        ['h', 'e', 'l', 'l', 'o', 'z'],
+        ['z', 'z', 'z', 'z', 'z', 'z'],
+        ['z', 'z', 'z', 'z', 'z', 'z'],
+        ['z', 'z', 'z', 'z', 'z', 'z'],
+        ['z', 'z', 'z', 'z', 'z', 'z']
     ], "hello") is False
 
     assert dice_to_word2([

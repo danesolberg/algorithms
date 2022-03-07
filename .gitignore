@@ -10,3 +10,6 @@ __pycache__
 .idea/
 .pytest_cache
 .env
+
+whiteboard*
+ide*

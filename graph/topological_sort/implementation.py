@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 def top_sort(adj_list):
     visited = [False] * len(adj_list)
     stack = []
@@ -21,6 +24,33 @@ class Node:
     def __init__(self, val, adjacent):
         self.val = val
         self.adjacent = adjacent
+
+def tester(graph_data):
+    ADJACENCY_LIST = 1
+    VERTEX_LIST = 2
+    prereqs = defaultdict(list)
+    if isinstance(graph_data[0], list):
+        type = ADJACENCY_LIST
+    elif isinstance(graph_data[0], Node):
+        type = VERTEX_LIST
+
+    for i, v in enumerate(graph_data):
+        if type == 1:
+            for v_adj in v:
+                prereqs[v_adj].append(i)
+        elif type == 2:
+            for n in v.adjacent:
+                prereqs[n].append(v)
+        else:
+            raise ValueError('invalid graph data format')
+
+    if type == 1:
+        order = top_sort(graph_data)
+        for i, vertex_idx in enumerate(order):
+            prereq_list = prereqs[vertex_idx]
+            assert set(prereq_list) | set(order[:i]) == set(order[:i])
+
+
 
 if __name__ == "__main__":
     a = Node('a', [])
@@ -46,6 +76,4 @@ if __name__ == "__main__":
         [2],
     ]
 
-    order = top_sort(adj_list)
-
-    print(order)
+    tester(adj_list)
