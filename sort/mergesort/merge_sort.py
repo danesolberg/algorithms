@@ -37,4 +37,4 @@ def MergeSort(array):
 if __name__ == '__main__':
     unsorted = [7, 2, 1, 6, 8, 5, 3, 4]
     MergeSort(unsorted)
-    print(unsorted)
+    assert unsorted == [1,2,3,4,5,6,7,8]
