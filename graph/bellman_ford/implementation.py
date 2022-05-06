@@ -9,7 +9,7 @@ class Node:
 
 def bellman_ford(nodes, start):
     dists = {node: inf for node in nodes}
-    dists[s] = 0
+    dists[start] = 0
 
     updated = True
     while updated is True:

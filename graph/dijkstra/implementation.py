@@ -1,29 +1,36 @@
+import math
+import heapq
+
+
 class Node:
     def __init__(self, val, adjacent):
         self.val = val
         self.adjacent = adjacent
 
-import heapq
-def dijkstra(adj_list, mapping, start):
+def dijkstra(adj_list, mapping, start, goal=None):
     n = len(adj_list)
-    dists = [float("inf")] * n
+    dists = [math.inf] * n
     parents = [None] * n
+    visited = set([mapping[start]])
 
     dists[mapping[start]] = 0
     pq = [(0, mapping[start])]
 
     while pq:
         cur_dist, cur_node = heapq.heappop(pq)
-        # can push same node into pq multiple times, so only process node once (the shortest path to node).
-        if cur_dist > dists[cur_node]:
-            continue
+
+        if goal and cur_node == mapping[goal]:
+            return cur_dist
+
+        visited.add(cur_node)
         neighbors = adj_list[cur_node]
         for i, weight in neighbors:
-            distance = weight + cur_dist
-            if distance < dists[i]:
-                dists[i] = distance
-                parents[i] = cur_node
-                heapq.heappush(pq, (distance, i))
+            if i not in visited:
+                new_dist = weight + cur_dist
+                if new_dist < dists[i]:
+                    dists[i] = new_dist
+                    parents[i] = cur_node
+                    heapq.heappush(pq, (new_dist, i))
     return dists
 
 
@@ -56,3 +63,7 @@ if __name__ == "__main__":
     dists = dijkstra(adj_list, mapping, a)
 
     print(dists)
+    # no goal node
+    assert dists == [0,4,6,7,5,7]
+    # with goal node
+    assert dijkstra(adj_list, mapping, a, f) == 7
