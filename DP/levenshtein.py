@@ -20,6 +20,7 @@ def levenshetin_dist_bottom_up(a, b):
             else:
                 dp[i][j] = min(dp[i-1][j], dp[i][j-1],dp[i-1][j-1])
 
+            # important bit down here!
             if a[i] != b[j]:
                 dp[i][j] += 1
 

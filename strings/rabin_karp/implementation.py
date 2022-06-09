@@ -1,16 +1,17 @@
-BASE = 101
+P = 101
+M = 10**9 + 9
 
 def compute_hash(string, highest_mult):
-    mult = BASE**highest_mult
+    mult = P**highest_mult
     h = 0
     for i in range(len(string)):
         c = string[i]
         h += ord(c) * mult
-        mult //= BASE
-    return h % pow(2,31)
+        mult //= P
+    return h % M
 
 def roll_hash(cur_hash, drop_c, add_c, highest_mult):
-    return (((cur_hash - ord(drop_c)*pow(BASE,highest_mult)) * BASE) + ord(add_c)) % pow(2,31)
+    return (((cur_hash - ord(drop_c)*pow(P,highest_mult)) * P) + ord(add_c)) % M
 
 def compare(pattern, string, start):
     for i in range(len(pattern)):
@@ -30,18 +31,20 @@ def contains(string, pattern):
         return l
     l += 1
     r += 1
+    ret = []
     while r < len(string):
         win_hash = roll_hash(win_hash, string[l-1], string[r], pat_l-1)
         if win_hash == pat_hash and compare(pattern, string, l):
-            return l
+            ret.append(l)
         l += 1
         r += 1
-    return -1
+
+    return ret or -1
 
 
 if __name__ == '__main__':
     string = "ababcaababcaabc"
-    pat = "ababcaabc"
+    pat = "abc"
     
     print(contains(string, pat))
         

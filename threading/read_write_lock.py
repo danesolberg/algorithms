@@ -35,6 +35,43 @@ class SimpleReadWriteLock:
         print('write released')
 
 
+# use order of write lock acquire to force writes in front of subsequent reads
+class ReadWriteLockWritePreferredEPI:
+    def __init__(self):
+        self.r_lock = Condition()
+        self.r_count = 0
+        self.w_lock = Lock()
+
+    def read_acquire(self):
+        self.w_lock.acquire()
+        self.w_lock.release()
+        self.r_lock.acquire()
+        print('read acquired')
+        self.r_count += 1
+        self.r_lock.release()
+
+    def read_release(self):
+        if self.r_count > 0:
+            self.r_lock.acquire()
+            self.r_count -= 1
+            self.r_lock.notifyAll()
+            print('read released')
+            self.r_lock.release()
+
+    def write_acquire(self):
+        self.w_lock.acquire()
+        print('write waiting on readers')
+        self.r_lock.acquire()
+        while self.r_count > 0:
+            self.r_lock.wait()
+        print('write acquired')
+        self.r_lock.release()
+
+    def write_release(self):
+        self.w_lock.release()
+        print('write released')
+
+
 class ReadWriteLockWritePreferred:
     def __init__(self):
         self.r_lock = Condition()
@@ -127,7 +164,8 @@ if __name__ == "__main__":
     for rwlock in [
         # SimpleReadWriteLock, 
         # MonitorReadWriteLock, 
-        ReadWriteLockWritePreferred,
+        # ReadWriteLockWritePreferred,
+        ReadWriteLockWritePreferredEPI,
     ]:
         lock = rwlock()
         pool = []

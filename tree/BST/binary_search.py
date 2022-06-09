@@ -43,7 +43,7 @@ def InOrderTraversal(node):
 
 def InOrderTraversalList(node):
     if node.left:
-    	left = InOrderTraversalList(node.left)
+        left = InOrderTraversalList(node.left)
     else:
         left = []
     if node.right:

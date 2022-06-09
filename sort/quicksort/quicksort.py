@@ -16,6 +16,9 @@ def lomuto_partition(array, start, end):
 
 # hoare partition: fewer swaps, but same complexity
 # somewhat esoteric
+# Hoare's partition is more efficient than Lomuto's partition because 
+# it does three times fewer swaps on average, and creates efficient 
+# partitions even when all values are equal.
 def hoare_partition(array, start, end):
     pivot = array[start]
     left = start - 1
